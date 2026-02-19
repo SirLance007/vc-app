@@ -1,36 +1,61 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# VC Intelligence Interface + Live Enrichment
+
+A premium VC discovery dashboard allowing users to browse startup data and enrich it with live web data using real-time scraping.
+
+![VC App](https://via.placeholder.com/800x400?text=VC+Intelligence+Interface)
+
+## Features
+
+- **Discovery Engine**: Browse, filter, and sort companies by Industry, Stage, and Location.
+- **Company Profiles**: Detailed views with overview, notes, and signals.
+- **Live Enrichment**: Real-time server-side scraping of company websites to extract metadata (Title, Description, Keywords) and derive signals (e.g., "Hiring", "Pricing").
+- **Lists & Persistence**: functional "Save" button to bookmark companies and saved searches (persisted to LocalStorage).
+- **Responsive Design**: Mobile-friendly sidebar and layout.
+
+## Tech Stack
+
+- **Framework**: Next.js 14 (App Router)
+- **Language**: TypeScript
+- **Styling**: Tailwind CSS + Shadcn UI
+- **Icons**: Lucide React
+- **Scraping**: Cheerio (Server Actions/API)
 
 ## Getting Started
 
-First, run the development server:
+1. **Clone the repository**
+   ```bash
+   git clone <repo-url>
+   cd vc-app
+   ```
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+2. **Install Dependencies**
+   ```bash
+   npm install
+   ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+3. **Run Development Server**
+   ```bash
+   npm run dev
+   ```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+4. **Open in Browser**
+   - Navigate to [http://localhost:3000](http://localhost:3000).
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Enrichment API
 
-## Learn More
+The app includes a live enrichment API route at `/api/enrich`.
+- **Method**: POST
+- **Body**: `{ "url": "https://example.com" }`
+- **Response**: JSON with title, description, keywords, and heuristic signals.
 
-To learn more about Next.js, take a look at the following resources:
+## Deployment
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+This app is ready to check deployed on Vercel.
+1. Push to GitHub.
+2. Import project in Vercel.
+3. No environment variables required for the base version.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Key Decisions
+- **Mock Data**: Started with static mock data for speed, but architected to support real API easily.
+- **Cheerio vs LLM**: Used Cheerio for the "Enrichment" to ensure reliability and speed without needing paid API keys for the demo.
+- **Client-side State**: Used `useState` and `localStorage` for Lists to keep the app lightweight and serverless-ready.
