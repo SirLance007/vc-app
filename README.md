@@ -1,61 +1,82 @@
-# VC Intelligence Interface + Live Enrichment
+# VC Intelligence Interface
 
-A premium VC discovery dashboard allowing users to browse startup data and enrich it with live web data using real-time scraping.
+A powerful, modern dashboard for Venture Capitalists to discover, track, and analyze startup companies. This application combines structured mock data with real-time web scraping to provide a comprehensive view of potential investments.
 
-![VC App](https://via.placeholder.com/800x400?text=VC+Intelligence+Interface)
+## 🚀 Overview
 
-## Features
+The VC Intelligence Interface acts as a central hub for investment analysis. It features a polished, responsive UI designed for quick data consumption and deep-dive research.
 
-- **Discovery Engine**: Browse, filter, and sort companies by Industry, Stage, and Location.
-- **Company Profiles**: Detailed views with overview, notes, and signals.
-- **Live Enrichment**: Real-time server-side scraping of company websites to extract metadata (Title, Description, Keywords) and derive signals (e.g., "Hiring", "Pricing").
-- **Lists & Persistence**: functional "Save" button to bookmark companies and saved searches (persisted to LocalStorage).
-- **Responsive Design**: Mobile-friendly sidebar and layout.
+### Key Features
+- **Company Discovery**: A searchable, filterable dashboard of trending startups.
+- **Deep-Dive Profiles**: Detailed views for each company including growth metrics, financials, and team info.
+- **Live Data Enrichment**: On-demand web scraping to fetch the latest signals directly from company websites.
+- **AI Analyst Simulation**: Instant "thesis generation" based on company data.
 
-## Tech Stack
+---
 
-- **Framework**: Next.js 14 (App Router)
-- **Language**: TypeScript
-- **Styling**: Tailwind CSS + Shadcn UI
-- **Icons**: Lucide React
-- **Scraping**: Cheerio (Server Actions/API)
+## 📊 Data Sources Explained
 
-## Getting Started
+This application uses a hybrid approach to data, combining static mock data with real-time live data:
 
-1. **Clone the repository**
+### 1. Dummy / Mock Data (The Foundation)
+The core database of companies, including their initial descriptions, industry tags, growth charts, and financial projections, is **simulated**.
+- **Location**: `lib/data/mock-companies.ts`
+- **Usage**: Used to populate the main "Companies" list and the initial "Overview" tab on profile pages.
+- **Purpose**: To demonstrate the UI/UX flows without needing a persistent database or expensive API subscriptions for the demo.
+- **AI Analysis**: The "AI Investment Analyst" and "Growth Charts" generate deterministic simulated results based on the company name to mimic advanced analytics.
+
+### 2. Real Data / Live Enrichment (The Magic)
+When you click the **"Enrich Data"** button on a company profile, the app performs real-time data fetching.
+- **Location**: `app/api/enrich/route.ts` & `app/companies/[id]/page.tsx`
+- **Mechanism**: A server-side API route uses **Cheerio** to visit the company's public URL in real-time.
+- **What is Fetched**:
+  - **Live Meta Tags**: Current title, description, and keywords from the website.
+  - **Signals**: Detects "Hiring", "Pricing Pages", or "Twitter/X Presence" by analyzing page content.
+  - **Founders**: Attempts to scrape founder names and roles using regex patterns on "About/Team" pages.
+  - **Funding**: Scans for patterns like "$XX Million" to detect funding announcements.
+- **Note**: If a site blocks the scraper, the app handles it gracefully (or falls back to specific hardcoded demos for generic sites like Vercel/Linear for showcase purposes).
+
+---
+
+## 🛠 Tech Stack
+
+- **Framework**: [Next.js 15](https://nextjs.org/) (App Router)
+- **Styling**: [Tailwind CSS](https://tailwindcss.com/)
+- **Components**: [Shadcn UI](https://ui.shadcn.com/) (Radix Primitives)
+- **Icons**: [Lucide React](https://lucide.dev/)
+- **Charts**: [Recharts](https://recharts.org/)
+- **Scraping**: [Cheerio](https://cheerio.js.org/)
+- **Animations**: [Framer Motion](https://www.framer.com/motion/)
+
+---
+
+## 💻 Getting Started
+
+1. **Clone the repository** (if you haven't already):
    ```bash
    git clone <repo-url>
    cd vc-app
    ```
 
-2. **Install Dependencies**
+2. **Install Dependencies**:
    ```bash
    npm install
    ```
 
-3. **Run Development Server**
+3. **Run the Development Server**:
    ```bash
    npm run dev
    ```
 
-4. **Open in Browser**
-   - Navigate to [http://localhost:3000](http://localhost:3000).
+4. **Open the App**:
+   Visit [http://localhost:3000](http://localhost:3000) in your browser.
 
-## Enrichment API
+## 🧭 How to Use
 
-The app includes a live enrichment API route at `/api/enrich`.
-- **Method**: POST
-- **Body**: `{ "url": "https://example.com" }`
-- **Response**: JSON with title, description, keywords, and heuristic signals.
-
-## Deployment
-
-This app is ready to check deployed on Vercel.
-1. Push to GitHub.
-2. Import project in Vercel.
-3. No environment variables required for the base version.
-
-## Key Decisions
-- **Mock Data**: Started with static mock data for speed, but architected to support real API easily.
-- **Cheerio vs LLM**: Used Cheerio for the "Enrichment" to ensure reliability and speed without needing paid API keys for the demo.
-- **Client-side State**: Used `useState` and `localStorage` for Lists to keep the app lightweight and serverless-ready.
+1. **Browse Companies**: Use the main dashboard to view the list of curated startups.
+2. **View Profile**: Click on any company (e.g., "Vercel" or "Supabase") to see their detailed profile.
+3. **Test Real Data**:
+   - Go to the **"Overview"** tab.
+   - Click the **"Enrich Data"** button (top right of the header).
+   - Wait for the "Enrichment complete!" toast.
+   - A new **"Live Signals"** tab will appear with fresh data scraped from the actual website.
